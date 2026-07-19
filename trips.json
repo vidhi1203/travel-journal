@@ -524,5 +524,26 @@
    "first": "2026-08-06",
    "last": "2026-08-06"
   }
+ ],
+ "roadTrips": [
+  { "city": "Shirdi", "country": "India", "region": "Maharashtra", "group": "India", "lat": 19.766, "lon": 74.477 },
+  { "city": "Nashik", "country": "India", "region": "Maharashtra", "group": "India", "lat": 19.997, "lon": 73.789 },
+  { "city": "Lonavala", "country": "India", "region": "Maharashtra", "group": "India", "lat": 18.754, "lon": 73.406 },
+  { "city": "Pune", "country": "India", "region": "Maharashtra", "group": "India", "lat": 18.520, "lon": 73.856 },
+  { "city": "Goa", "country": "India", "region": "Goa", "group": "India", "lat": 15.490, "lon": 73.827 },
+  { "city": "Providence", "country": "United States", "region": "Rhode Island", "group": "Northeast & Mid-Atlantic US", "lat": 41.824, "lon": -71.413 },
+  { "city": "New Haven", "country": "United States", "region": "Connecticut", "group": "Northeast & Mid-Atlantic US", "lat": 41.308, "lon": -72.928 },
+  { "city": "Jersey City", "country": "United States", "region": "New Jersey", "group": "Northeast & Mid-Atlantic US", "lat": 40.728, "lon": -74.078 },
+  { "city": "Baltimore", "country": "United States", "region": "Maryland", "group": "Northeast & Mid-Atlantic US", "lat": 39.290, "lon": -76.612 },
+  { "city": "Reno", "country": "United States", "region": "Nevada", "group": "West US", "lat": 39.530, "lon": -119.814 },
+  { "city": "Lake Tahoe", "country": "United States", "region": "Nevada / California", "group": "West US", "lat": 39.093, "lon": -120.032 },
+  { "city": "Hoover Dam", "country": "United States", "region": "Nevada / Arizona", "group": "West US", "lat": 36.016, "lon": -114.737 },
+  { "city": "Milwaukee", "country": "United States", "region": "Wisconsin", "group": "Midwest US", "lat": 43.039, "lon": -87.906 },
+  { "city": "Indiana Dunes National Park", "country": "United States", "region": "Indiana", "group": "Midwest US", "lat": 41.653, "lon": -87.049 },
+  { "city": "Geneva", "country": "Switzerland", "region": "Switzerland", "group": "Europe", "lat": 46.204, "lon": 6.143 },
+  { "city": "Venice", "country": "Italy", "region": "Italy", "group": "Europe", "lat": 45.440, "lon": 12.316 },
+  { "city": "Vatican City", "country": "Vatican City", "region": "Vatican City", "group": "Europe", "lat": 41.902, "lon": 12.453 },
+  { "city": "Macau", "country": "Macau SAR, China", "region": "Macau", "group": "Southeast Asia", "lat": 22.198, "lon": 113.543 },
+  { "city": "Pattaya", "country": "Thailand", "region": "Thailand", "group": "Southeast Asia", "lat": 12.928, "lon": 100.877 }
  ]
 }

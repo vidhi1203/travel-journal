@@ -422,8 +422,16 @@
       const layMat = new THREE.MeshBasicMaterial({
         color: 0x8493a8, transparent: true, opacity: 0.6,
       });
+      // reached by road/rail/ferry, never by plane — a dim, ringless amber
+      // dot with no code label, so it reads as "visited" without implying
+      // a landing
+      const roadGeo = new THREE.SphereGeometry(0.0065, 8, 8);
+      const roadMat = new THREE.MeshBasicMaterial({
+        color: 0xfbbf24, transparent: true, opacity: 0.55,
+      });
+
       const cityPins = [];
-      tripsData.then(({ cities }) => {
+      tripsData.then(({ cities, roadTrips }) => {
         for (const c of cities) {
           const stayed = c.stays > 0;
           const n = latLonToVec3(c.lat, c.lon, 1);
@@ -444,6 +452,12 @@
           el.textContent = c.codes[0];
           stage.appendChild(el);
           cityPins.push({ el, n });
+        }
+        for (const c of (roadTrips || [])) {
+          const n = latLonToVec3(c.lat, c.lon, 1);
+          const dot = new THREE.Mesh(roadGeo, roadMat);
+          dot.position.copy(n).multiplyScalar(1.002);
+          globe.add(dot);
         }
       }).catch(() => {});
 

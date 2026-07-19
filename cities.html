@@ -74,6 +74,18 @@
   .load-note {
     font-family: "DM Mono", monospace; font-size: 13px; color: var(--muted);
   }
+
+  /* ===== road trips: same wall, no flight codes ===== */
+  .road-section { margin-top: 48px; }
+  .road-group { margin-top: 26px; }
+  .road-group h3.group-title {
+    font-family: "DM Mono", monospace; font-size: 11px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--cyan-soft); margin: 0 0 12px;
+  }
+  .city .region {
+    font-family: "DM Mono", monospace; font-size: 11.5px; letter-spacing: .16em;
+    color: var(--muted);
+  }
 </style>
 </head>
 
@@ -100,6 +112,12 @@
     <p class="passed" id="passed" hidden></p>
   </section>
 
+  <section class="road-section" id="road-section" hidden>
+    <div class="eyebrow">No boarding pass required</div>
+    <h2>Also explored — by road, rail, or ferry.</h2>
+    <div id="road-groups"></div>
+  </section>
+
   <footer class="hop">
     <a href="index.html">← THE JOURNAL</a>
     <a class="next" href="chicago.html">FIRST JOURNAL ENTRY · <b>ORD CHICAGO</b> →</a>
@@ -112,7 +130,7 @@
     ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
 
   fetch("trips.json").then(r => r.json()).then(data => {
-    const { stats, cities, trips, home } = data;
+    const { stats, cities, trips, home, roadTrips } = data;
     const pages = Object.fromEntries(trips.map(t => [t.city, t.page]));
 
     document.getElementById("log-code").textContent =
@@ -149,6 +167,28 @@
     passedEl.hidden = false;
     passedEl.innerHTML = '<span class="k">PASSED THROUGH, NEVER STAYED</span> ' +
       passed.map(c => `${esc(c.city)} <span>${esc(c.codes.join("/"))}</span>`).join(" · ");
+
+    if (roadTrips && roadTrips.length) {
+      const groups = [];
+      for (const c of roadTrips) {
+        let g = groups.find(g => g.name === c.group);
+        if (!g) { g = { name: c.group, cities: [] }; groups.push(g); }
+        g.cities.push(c);
+      }
+      document.getElementById("road-groups").innerHTML = groups.map(g => `
+        <div class="road-group">
+          <h3 class="group-title">${esc(g.name)}</h3>
+          <div class="wall">
+            ${g.cities.map(c => `
+              <div class="city">
+                <div class="region">${esc(c.region.toUpperCase())}</div>
+                <h3>${esc(c.city)}</h3>
+                <div class="sub-line">${esc(c.country)}</div>
+              </div>`).join("")}
+          </div>
+        </div>`).join("");
+      document.getElementById("road-section").hidden = false;
+    }
   }).catch(err => {
     document.getElementById("wall").innerHTML =
       `<p class="load-note">Couldn't load trips.json (${esc(err.message)}).</p>`;
