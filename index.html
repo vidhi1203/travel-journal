@@ -528,8 +528,11 @@
       /* the story should replay from the top on reload, not resume mid-flight */
       history.scrollRestoration = "manual";
 
-      /* Lenis smooth scroll wired to GSAP's ticker */
-      const lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 0.9 });
+      /* Lenis smooth scroll wired to GSAP's ticker.
+         syncTouch + a lower touchMultiplier route mobile touch-scroll
+         through the same smoothing as the wheel — without it, touch
+         scrolling bypasses Lenis's lerp and blows past the landing beat. */
+      const lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 0.9, syncTouch: true, touchMultiplier: 1.2 });
       lenis.on("scroll", ScrollTrigger.update);
       gsap.ticker.add((t) => lenis.raf(t * 1000));
       gsap.ticker.lagSmoothing(0);
@@ -556,7 +559,11 @@
 
       // one scrubbed value drives everything: globe rotation, camera,
       // trail, and plane all read flight.p inside render()
-      tl.to(flight, { p: 1, ease: "power1.inOut", duration: 1 }, 0);
+      // landing finishes at .85 of the pin, leaving the last stretch of
+      // scroll as a held pause on Chicago before the section unpins —
+      // otherwise the release reads as an abrupt jump, especially on
+      // touch scroll.
+      tl.to(flight, { p: 1, ease: "power1.inOut", duration: .85 }, 0);
 
       // headline beats: takeoff, packed bag, then a wordless crossing,
       // and "I travelled." as the plane descends into Chicago.
