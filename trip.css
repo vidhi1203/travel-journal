@@ -1,0 +1,304 @@
+/* ===== shared styles for city trip pages ===== */
+
+:root {
+  --space-0:   #04060d;
+  --space-1:   #070b16;
+  --space-2:   #0b1120;
+  --ocean-deep:#0a2540;
+  --ocean-mid: #123a5e;
+  --cyan:      #4cc9f0;
+  --cyan-soft: #48cae4;
+  --mint:      #a7f3d0;
+  --amber:     #fbbf24;
+  --ink:       #eaf0f7;
+  --muted:     #8493a8;
+  --line:      rgba(148,163,184,0.14);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { background: var(--space-0); }
+body {
+  background:
+    radial-gradient(1100px 620px ellipse at 50% -120px, #0c1428 0%, rgba(12,20,40,0) 70%),
+    var(--space-0);
+  color: var(--ink);
+  font-family: "DM Sans", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body { overflow-x: hidden; }
+
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(28px, 5vh, 64px) clamp(20px, 5vw, 48px) 120px;
+}
+
+/* ===== top nav ===== */
+.crumb {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: "DM Mono", monospace;
+  font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  margin-bottom: clamp(36px, 7vh, 70px);
+  transition: color .25s ease;
+}
+.crumb:hover { color: var(--mint); }
+.crumb .back-arrow { color: var(--mint); }
+
+/* ===== trip stamp header (boarding-pass stub) ===== */
+.stamp {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(160deg, rgba(19,58,94,0.25), rgba(11,17,32,0.55));
+  padding: clamp(26px, 4vw, 44px);
+  display: flex; flex-wrap: wrap; gap: 28px;
+  align-items: flex-end; justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+.stamp::after {           /* perforation line, like a torn ticket */
+  content: "";
+  position: absolute; top: 0; bottom: 0; right: clamp(90px, 18%, 220px);
+  border-left: 1.5px dashed rgba(148,163,184,0.25);
+}
+.stamp .code {
+  font-family: "DM Mono", monospace;
+  font-size: 13px; letter-spacing: .22em; color: var(--cyan-soft);
+}
+.stamp h1 {
+  font-family: "DM Serif Display", serif;
+  font-size: clamp(46px, 8vw, 92px);
+  line-height: .98; letter-spacing: -0.01em;
+  margin-top: 10px;
+}
+.stamp h1 em { font-style: italic; color: var(--cyan); }
+.stamp .meta {
+  margin-top: 16px;
+  font-family: "DM Mono", monospace;
+  font-size: 13px; color: var(--muted);
+  display: flex; flex-wrap: wrap; gap: 8px 22px;
+}
+.stamp .meta b { color: var(--ink); font-weight: 500; }
+.stamp .route {
+  font-family: "DM Mono", monospace;
+  text-align: right; min-width: clamp(80px, 16%, 200px);
+}
+.stamp .route .flight-no { font-size: 12px; letter-spacing: .18em; color: var(--muted); }
+.stamp .route .legs { font-size: 22px; margin-top: 8px; color: var(--ink); }
+.stamp .route .legs .arrow { color: var(--mint); }
+
+/* ===== sections ===== */
+section { margin-top: clamp(64px, 10vh, 110px); }
+.eyebrow {
+  font-family: "DM Mono", monospace;
+  font-size: 12px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--cyan-soft);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.eyebrow::before {
+  content: ""; width: 34px; height: 1px; background: var(--cyan-soft); opacity: .7;
+}
+section > h2 {
+  font-family: "DM Serif Display", serif;
+  font-size: clamp(26px, 3.6vw, 40px);
+  letter-spacing: -0.01em;
+  margin-bottom: 26px;
+}
+
+/* ===== map ===== */
+.map-frame {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--space-2);
+}
+.map-frame iframe { display: block; width: 100%; height: clamp(340px, 52vh, 520px); border: 0; }
+.map-placeholder {
+  height: clamp(280px, 40vh, 420px);
+  display: grid; place-items: center; text-align: center;
+  padding: 30px;
+  color: var(--muted);
+}
+.map-placeholder .pin-glyph { font-size: 34px; margin-bottom: 14px; }
+.map-placeholder code {
+  font-family: "DM Mono", monospace; font-size: 12.5px; color: var(--cyan-soft);
+}
+.spots {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 14px;
+}
+.spot {
+  display: block; text-decoration: none; color: inherit;
+  border: 1px solid var(--line); border-radius: 13px;
+  padding: 16px 18px;
+  background: rgba(11,17,32,0.45);
+  transition: transform .3s ease, border-color .3s ease;
+}
+.spot:hover { transform: translateY(-3px); border-color: rgba(167,243,208,0.45); }
+.spot .name { font-size: 16.5px; font-weight: 500; display: flex; gap: 9px; align-items: baseline; }
+.spot .name::before { content: "●"; color: var(--amber); font-size: 10px; }
+.spot .why { margin-top: 6px; font-size: 13.5px; color: var(--muted); line-height: 1.45; }
+.spot .gmaps {
+  margin-top: 10px;
+  font-family: "DM Mono", monospace; font-size: 11px; letter-spacing: .12em;
+  color: var(--mint);
+}
+
+/* ===== photo scroll ===== */
+.film {
+  display: flex; gap: 16px;
+  overflow-x: auto;
+  padding: 6px 2px 18px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148,163,184,0.35) transparent;
+}
+.film figure {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+  width: clamp(240px, 34vw, 380px);
+}
+.film img, .film .slot {
+  width: 100%; height: clamp(300px, 42vh, 440px);
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: linear-gradient(160deg, rgba(19,58,94,0.35), rgba(11,17,32,0.6));
+}
+.film .slot {
+  display: grid; place-items: center; text-align: center;
+  color: var(--muted); font-size: 13px; padding: 24px; line-height: 1.5;
+}
+.film .slot code { font-family: "DM Mono", monospace; font-size: 12px; color: var(--cyan-soft); }
+.film figcaption {
+  margin-top: 10px;
+  font-family: "DM Mono", monospace;
+  font-size: 11.5px; letter-spacing: .08em; color: var(--muted);
+}
+
+/* ===== instagram ===== */
+.ig-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+.ig-card {
+  display: flex; align-items: center; gap: 14px;
+  text-decoration: none; color: inherit;
+  border: 1px solid var(--line); border-radius: 13px;
+  padding: 16px 18px;
+  background: rgba(11,17,32,0.45);
+  transition: transform .3s ease, border-color .3s ease;
+}
+.ig-card:hover { transform: translateY(-3px); border-color: rgba(76,201,240,0.45); }
+.ig-card .glyph {
+  width: 38px; height: 38px; flex: 0 0 auto;
+  border-radius: 11px;
+  border: 1.6px solid var(--cyan-soft);
+  display: grid; place-items: center;
+  position: relative;
+}
+.ig-card .glyph::before {      /* lens */
+  content: ""; width: 14px; height: 14px;
+  border: 1.6px solid var(--cyan-soft); border-radius: 50%;
+}
+.ig-card .glyph::after {       /* flash dot */
+  content: ""; position: absolute; top: 6px; right: 6px;
+  width: 3.5px; height: 3.5px; border-radius: 50%;
+  background: var(--cyan-soft);
+}
+.ig-card .label { font-size: 14.5px; font-weight: 500; }
+.ig-card .handle {
+  font-family: "DM Mono", monospace;
+  font-size: 11.5px; color: var(--muted); margin-top: 3px;
+}
+
+/* ===== notes (journal entry) ===== */
+.notes {
+  border-left: 2px solid rgba(167,243,208,0.4);
+  padding-left: clamp(20px, 3vw, 34px);
+  max-width: 68ch;
+}
+.notes p {
+  font-size: clamp(16.5px, 1.6vw, 19px);
+  line-height: 1.75;
+  color: #c6d2e0;
+}
+.notes p + p { margin-top: 1.1em; }
+.notes .date {
+  font-family: "DM Mono", monospace;
+  font-size: 12px; letter-spacing: .16em; color: var(--muted);
+  margin-bottom: 14px; display: block;
+}
+
+/* ===== top three ===== */
+.podium {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+.podium .win {
+  border: 1px solid var(--line); border-radius: 15px;
+  padding: 22px 22px 20px;
+  background: linear-gradient(160deg, rgba(19,58,94,0.28), rgba(11,17,32,0.5));
+}
+.podium .cat {
+  font-family: "DM Mono", monospace;
+  font-size: 11.5px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--amber);
+}
+.podium h3 {
+  font-family: "DM Serif Display", serif;
+  font-size: 24px; margin: 10px 0 6px;
+}
+.podium p { font-size: 13.5px; color: var(--muted); line-height: 1.5; }
+
+/* ===== next time ===== */
+.next-time { list-style: none; max-width: 640px; }
+.next-time li {
+  display: flex; gap: 14px; align-items: baseline;
+  padding: 13px 4px;
+  border-bottom: 1px dashed rgba(148,163,184,0.22);
+  font-size: 15.5px; color: #c6d2e0;
+}
+.next-time li::before {
+  content: "→";
+  font-family: "DM Mono", monospace;
+  color: var(--mint); flex: 0 0 auto;
+}
+
+/* ===== getting around ===== */
+.howto { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.howto .tip {
+  border: 1px solid var(--line); border-radius: 13px;
+  padding: 18px 20px;
+  background: rgba(11,17,32,0.45);
+}
+.howto .k {
+  font-family: "DM Mono", monospace;
+  font-size: 11.5px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--cyan-soft); margin-bottom: 8px;
+}
+.howto p { font-size: 14px; color: var(--muted); line-height: 1.55; }
+
+/* ===== footer hop ===== */
+.hop {
+  margin-top: clamp(80px, 12vh, 130px);
+  padding-top: 34px;
+  border-top: 1px solid var(--line);
+  display: flex; justify-content: space-between; align-items: center; gap: 20px;
+  font-family: "DM Mono", monospace; font-size: 13px;
+}
+.hop a { color: var(--muted); text-decoration: none; transition: color .25s ease; }
+.hop a:hover { color: var(--mint); }
+.hop .next b { color: var(--ink); font-weight: 500; }
+
+@media (max-width: 640px) {
+  .stamp::after { display: none; }
+  .stamp .route { text-align: left; }
+}

@@ -1,0 +1,528 @@
+{
+ "_generated": "2026-07-18 from the Flighty log (Vidhi profile, 76 flights) — cities/stats are data, trips are hand-curated journal entries",
+ "home": "Mumbai",
+ "stats": {
+  "flights": 76,
+  "km": 170323,
+  "earths": 4.25,
+  "airlines": 14,
+  "airports": 39,
+  "countries": 9,
+  "cities": 30,
+  "first": "2008-05-11",
+  "last": "2026-08-11"
+ },
+ "trips": [
+  {
+   "city": "Chicago",
+   "code": "ORD",
+   "year": "2025",
+   "coords": "41.88°N 87.63°W",
+   "season": "winter",
+   "page": "chicago.html",
+   "tags": [
+    "Millennium Park",
+    "The Bean",
+    "Deep dish"
+   ]
+  },
+  {
+   "city": "Mumbai",
+   "code": "BOM",
+   "year": "home",
+   "coords": "19.08°N 72.88°E",
+   "season": "always",
+   "page": "mumbai.html",
+   "tags": [
+    "Marine Drive",
+    "Vada pav",
+    "Monsoon"
+   ]
+  }
+ ],
+ "cities": [
+  {
+   "city": "Mumbai",
+   "country": "India",
+   "codes": [
+    "BOM"
+   ],
+   "lat": 19.089,
+   "lon": 72.868,
+   "stays": 14,
+   "layovers": 0,
+   "first": "2008-05-11",
+   "last": "2024-09-18"
+  },
+  {
+   "city": "Kuala Lumpur",
+   "country": "Malaysia",
+   "codes": [
+    "KUL"
+   ],
+   "lat": 2.746,
+   "lon": 101.71,
+   "stays": 1,
+   "layovers": 1,
+   "first": "2008-05-12",
+   "last": "2008-05-18"
+  },
+  {
+   "city": "Hong Kong",
+   "country": "Hong Kong",
+   "codes": [
+    "HKG"
+   ],
+   "lat": 22.309,
+   "lon": 113.915,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2008-05-12",
+   "last": "2008-05-12"
+  },
+  {
+   "city": "Paris",
+   "country": "France",
+   "codes": [
+    "CDG"
+   ],
+   "lat": 49.013,
+   "lon": 2.55,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2011-05-14",
+   "last": "2011-05-14"
+  },
+  {
+   "city": "Rome",
+   "country": "Italy",
+   "codes": [
+    "FCO"
+   ],
+   "lat": 41.8,
+   "lon": 12.239,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2011-05-31",
+   "last": "2011-05-31"
+  },
+  {
+   "city": "Kochi",
+   "country": "India",
+   "codes": [
+    "COK"
+   ],
+   "lat": 10.152,
+   "lon": 76.402,
+   "stays": 2,
+   "layovers": 0,
+   "first": "2013-10-25",
+   "last": "2018-03-19"
+  },
+  {
+   "city": "Jammu",
+   "country": "India",
+   "codes": [
+    "IXJ"
+   ],
+   "lat": 32.689,
+   "lon": 74.837,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2014-12-21",
+   "last": "2014-12-21"
+  },
+  {
+   "city": "Delhi",
+   "country": "India",
+   "codes": [
+    "DEL"
+   ],
+   "lat": 28.567,
+   "lon": 77.103,
+   "stays": 1,
+   "layovers": 4,
+   "first": "2014-12-26",
+   "last": "2022-01-03"
+  },
+  {
+   "city": "Amritsar",
+   "country": "India",
+   "codes": [
+    "ATQ"
+   ],
+   "lat": 31.71,
+   "lon": 74.797,
+   "stays": 2,
+   "layovers": 0,
+   "first": "2014-12-26",
+   "last": "2022-01-03"
+  },
+  {
+   "city": "Bangkok",
+   "country": "Thailand",
+   "codes": [
+    "BKK"
+   ],
+   "lat": 13.681,
+   "lon": 100.747,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2016-06-23",
+   "last": "2016-06-23"
+  },
+  {
+   "city": "Dharamsala",
+   "country": "India",
+   "codes": [
+    "DHM"
+   ],
+   "lat": 32.165,
+   "lon": 76.263,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2018-05-05",
+   "last": "2018-05-05"
+  },
+  {
+   "city": "Singapore",
+   "country": "Singapore",
+   "codes": [
+    "SIN"
+   ],
+   "lat": 1.35,
+   "lon": 103.994,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2019-06-14",
+   "last": "2019-06-14"
+  },
+  {
+   "city": "Jaisalmer",
+   "country": "India",
+   "codes": [
+    "JSA"
+   ],
+   "lat": 26.889,
+   "lon": 70.865,
+   "stays": 2,
+   "layovers": 0,
+   "first": "2021-11-30",
+   "last": "2021-11-30"
+  },
+  {
+   "city": "Dehra Dun",
+   "country": "India",
+   "codes": [
+    "DED"
+   ],
+   "lat": 30.19,
+   "lon": 78.18,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2023-02-19",
+   "last": "2023-02-19"
+  },
+  {
+   "city": "Chicago",
+   "country": "United States",
+   "codes": [
+    "MDW",
+    "ORD"
+   ],
+   "lat": 41.786,
+   "lon": -87.752,
+   "stays": 8,
+   "layovers": 1,
+   "first": "2023-09-01",
+   "last": "2026-08-10"
+  },
+  {
+   "city": "New York",
+   "country": "United States",
+   "codes": [
+    "LGA"
+   ],
+   "lat": 40.777,
+   "lon": -73.873,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2023-12-21",
+   "last": "2023-12-21"
+  },
+  {
+   "city": "Orlando",
+   "country": "United States",
+   "codes": [
+    "MCO"
+   ],
+   "lat": 28.429,
+   "lon": -81.309,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2024-03-10",
+   "last": "2024-03-10"
+  },
+  {
+   "city": "Toronto",
+   "country": "Canada",
+   "codes": [
+    "YYZ"
+   ],
+   "lat": 43.677,
+   "lon": -79.631,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2024-07-01",
+   "last": "2024-07-01"
+  },
+  {
+   "city": "San Jose",
+   "country": "United States",
+   "codes": [
+    "SJC"
+   ],
+   "lat": 37.363,
+   "lon": -121.929,
+   "stays": 8,
+   "layovers": 0,
+   "first": "2025-01-08",
+   "last": "2026-03-01"
+  },
+  {
+   "city": "Las Vegas",
+   "country": "United States",
+   "codes": [
+    "LAS"
+   ],
+   "lat": 36.08,
+   "lon": -115.152,
+   "stays": 2,
+   "layovers": 1,
+   "first": "2025-03-11",
+   "last": "2025-12-25"
+  },
+  {
+   "city": "San Francisco",
+   "country": "United States",
+   "codes": [
+    "SFO"
+   ],
+   "lat": 37.619,
+   "lon": -122.375,
+   "stays": 13,
+   "layovers": 0,
+   "first": "2025-05-15",
+   "last": "2026-08-11"
+  },
+  {
+   "city": "Washington DC",
+   "country": "United States",
+   "codes": [
+    "DCA",
+    "IAD"
+   ],
+   "lat": 38.852,
+   "lon": -77.038,
+   "stays": 3,
+   "layovers": 2,
+   "first": "2025-05-16",
+   "last": "2026-05-25"
+  },
+  {
+   "city": "Roanoke",
+   "country": "United States",
+   "codes": [
+    "ROA"
+   ],
+   "lat": 37.325,
+   "lon": -79.975,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2025-05-16",
+   "last": "2025-05-16"
+  },
+  {
+   "city": "Pittsburgh",
+   "country": "United States",
+   "codes": [
+    "PIT"
+   ],
+   "lat": 40.492,
+   "lon": -80.233,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2025-05-27",
+   "last": "2025-05-27"
+  },
+  {
+   "city": "Burbank",
+   "country": "United States",
+   "codes": [
+    "BUR"
+   ],
+   "lat": 34.201,
+   "lon": -118.359,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2025-06-20",
+   "last": "2025-06-20"
+  },
+  {
+   "city": "Honolulu",
+   "country": "United States",
+   "codes": [
+    "HNL"
+   ],
+   "lat": 21.321,
+   "lon": -157.924,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2025-10-28",
+   "last": "2025-10-28"
+  },
+  {
+   "city": "Oakland",
+   "country": "United States",
+   "codes": [
+    "OAK"
+   ],
+   "lat": 37.721,
+   "lon": -122.221,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2025-11-01",
+   "last": "2025-11-01"
+  },
+  {
+   "city": "Fairbanks",
+   "country": "United States",
+   "codes": [
+    "FAI"
+   ],
+   "lat": 64.815,
+   "lon": -147.856,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2026-02-22",
+   "last": "2026-02-22"
+  },
+  {
+   "city": "Boston",
+   "country": "United States",
+   "codes": [
+    "BOS"
+   ],
+   "lat": 42.364,
+   "lon": -71.005,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2026-05-20",
+   "last": "2026-05-20"
+  },
+  {
+   "city": "Minneapolis",
+   "country": "United States",
+   "codes": [
+    "MSP"
+   ],
+   "lat": 44.882,
+   "lon": -93.222,
+   "stays": 1,
+   "layovers": 0,
+   "first": "2026-08-06",
+   "last": "2026-08-06"
+  },
+  {
+   "city": "Dubai",
+   "country": "United Arab Emirates",
+   "codes": [
+    "DXB"
+   ],
+   "lat": 25.253,
+   "lon": 55.364,
+   "stays": 0,
+   "layovers": 4,
+   "first": "2011-05-14",
+   "last": "2024-09-18"
+  },
+  {
+   "city": "Aurangabad",
+   "country": "India",
+   "codes": [
+    "IXU"
+   ],
+   "lat": 19.863,
+   "lon": 75.398,
+   "stays": 0,
+   "layovers": 1,
+   "first": "2018-05-13",
+   "last": "2018-05-13"
+  },
+  {
+   "city": "Jaipur",
+   "country": "India",
+   "codes": [
+    "JAI"
+   ],
+   "lat": 26.824,
+   "lon": 75.812,
+   "stays": 0,
+   "layovers": 1,
+   "first": "2021-12-03",
+   "last": "2021-12-03"
+  },
+  {
+   "city": "Portland",
+   "country": "United States",
+   "codes": [
+    "PDX"
+   ],
+   "lat": 45.589,
+   "lon": -122.598,
+   "stays": 0,
+   "layovers": 1,
+   "first": "2026-02-21",
+   "last": "2026-02-21"
+  },
+  {
+   "city": "Anchorage",
+   "country": "United States",
+   "codes": [
+    "ANC"
+   ],
+   "lat": 61.174,
+   "lon": -149.996,
+   "stays": 0,
+   "layovers": 1,
+   "first": "2026-02-22",
+   "last": "2026-02-22"
+  },
+  {
+   "city": "Seattle",
+   "country": "United States",
+   "codes": [
+    "SEA"
+   ],
+   "lat": 47.449,
+   "lon": -122.309,
+   "stays": 0,
+   "layovers": 1,
+   "first": "2026-02-28",
+   "last": "2026-02-28"
+  },
+  {
+   "city": "Houston",
+   "country": "United States",
+   "codes": [
+    "IAH"
+   ],
+   "lat": 29.984,
+   "lon": -95.341,
+   "stays": 0,
+   "layovers": 1,
+   "first": "2026-08-06",
+   "last": "2026-08-06"
+  }
+ ]
+}

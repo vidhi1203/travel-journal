@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Every City — Travel Journal</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="trip.css" />
+<style>
+  /* page-specific: the city wall */
+  .stats {
+    margin-top: 20px;
+    display: flex; flex-wrap: wrap; gap: 10px 26px;
+    font-family: "DM Mono", monospace; font-size: 13px; color: var(--muted);
+  }
+  .stats b { color: var(--ink); font-weight: 500; }
+  .stats .x { color: var(--mint); }
+
+  .wall {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+    gap: 14px;
+  }
+  .city {
+    position: relative;
+    display: block; text-decoration: none; color: inherit;
+    border: 1px solid var(--line); border-radius: 14px;
+    padding: 18px 18px 16px;
+    background: rgba(11,17,32,0.45);
+  }
+  .city.linked { transition: transform .3s ease, border-color .3s ease; }
+  .city.linked:hover { transform: translateY(-3px); border-color: rgba(76,201,240,0.45); }
+  .city .idx {
+    position: absolute; top: 14px; right: 16px;
+    font-family: "DM Mono", monospace; font-size: 11px; color: rgba(132,147,168,0.55);
+  }
+  .city .codes {
+    font-family: "DM Mono", monospace; font-size: 11.5px; letter-spacing: .16em;
+    color: var(--cyan-soft);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .city .badge {
+    font-size: 9.5px; letter-spacing: .18em;
+    color: var(--amber); border: 1px solid rgba(251,191,36,0.45);
+    border-radius: 999px; padding: 1.5px 8px;
+  }
+  .city h3 {
+    font-family: "DM Serif Display", serif;
+    font-size: 23px; margin: 9px 0 3px; line-height: 1.08;
+  }
+  .city .sub-line { font-size: 12.5px; color: var(--muted); }
+  .city .facts {
+    margin-top: 12px;
+    font-family: "DM Mono", monospace; font-size: 11px; letter-spacing: .06em;
+    color: var(--muted);
+  }
+  .city .read {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace; font-size: 10.5px; letter-spacing: .14em;
+    color: var(--mint);
+  }
+
+  .passed {
+    margin-top: 26px;
+    font-family: "DM Mono", monospace; font-size: 12px; line-height: 2.1;
+    color: var(--muted); max-width: 80ch;
+  }
+  .passed span { color: rgba(132,147,168,0.6); font-size: 10.5px; }
+  .passed .k { color: var(--cyan-soft); letter-spacing: .2em; margin-right: 10px; }
+
+  .load-note {
+    font-family: "DM Mono", monospace; font-size: 13px; color: var(--muted);
+  }
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <a class="crumb" href="index.html"><span class="back-arrow">←</span> back to the journal</a>
+
+  <!-- everything below renders from trips.json -->
+  <header class="stamp">
+    <div>
+      <div class="code" id="log-code">THE FLIGHT LOG</div>
+      <h1>Every city.<br/><em>No layovers.</em></h1>
+      <div class="stats" id="stats"></div>
+    </div>
+  </header>
+
+  <section>
+    <div class="eyebrow">In order of first landing</div>
+    <h2>Where the plane actually stopped — and I stepped out.</h2>
+    <div class="wall" id="wall">
+      <p class="load-note">Loading the flight log… (this page needs trips.json, so serve the folder over http)</p>
+    </div>
+    <p class="passed" id="passed" hidden></p>
+  </section>
+
+  <footer class="hop">
+    <a href="index.html">← THE JOURNAL</a>
+    <a class="next" href="chicago.html">FIRST JOURNAL ENTRY · <b>ORD CHICAGO</b> →</a>
+  </footer>
+
+</div>
+
+<script>
+  const esc = s => String(s).replace(/[&<>"]/g,
+    ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
+
+  fetch("trips.json").then(r => r.json()).then(data => {
+    const { stats, cities, trips, home } = data;
+    const pages = Object.fromEntries(trips.map(t => [t.city, t.page]));
+
+    document.getElementById("log-code").textContent =
+      `THE FLIGHT LOG · SINCE ${stats.first.slice(0, 4)}`;
+
+    document.getElementById("stats").innerHTML = `
+      <span><b>${stats.cities}</b> cities</span>
+      <span><b>${stats.countries}</b> countries</span>
+      <span><b>${stats.flights}</b> flights</span>
+      <span><b>${stats.km.toLocaleString("en-US")}</b> km</span>
+      <span class="x">${stats.earths.toFixed(1)}× around the Earth</span>
+      <span><b>${stats.airports}</b> airports</span>
+      <span><b>${stats.airlines}</b> airlines</span>`;
+
+    const visited = cities.filter(c => c.stays > 0)
+                          .sort((a, b) => a.first.localeCompare(b.first));
+    const passed = cities.filter(c => c.stays === 0)
+                         .sort((a, b) => a.first.localeCompare(b.first));
+
+    document.getElementById("wall").innerHTML = visited.map((c, i) => {
+      const inner = `
+        <div class="idx">${String(i + 1).padStart(2, "0")}</div>
+        <div class="codes">${esc(c.codes.join("/"))}${c.city === home ? '<span class="badge">HOME</span>' : ""}</div>
+        <h3>${esc(c.city)}</h3>
+        <div class="sub-line">${esc(c.country)}</div>
+        <div class="facts">${c.first.slice(0, 4)} · ${c.stays} landing${c.stays === 1 ? "" : "s"}</div>`;
+      return pages[c.city]
+        ? `<a class="city linked" href="${esc(pages[c.city])}">${inner}
+             <div class="read">READ THE JOURNAL ↗</div></a>`
+        : `<div class="city">${inner}</div>`;
+    }).join("");
+
+    const passedEl = document.getElementById("passed");
+    passedEl.hidden = false;
+    passedEl.innerHTML = '<span class="k">PASSED THROUGH, NEVER STAYED</span> ' +
+      passed.map(c => `${esc(c.city)} <span>${esc(c.codes.join("/"))}</span>`).join(" · ");
+  }).catch(err => {
+    document.getElementById("wall").innerHTML =
+      `<p class="load-note">Couldn't load trips.json (${esc(err.message)}).</p>`;
+  });
+</script>
+</body>
+</html>

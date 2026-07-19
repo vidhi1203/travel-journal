@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chicago — Travel Journal</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="trip.css" />
+</head>
+
+<body>
+<div class="wrap">
+
+  <a class="crumb" href="index.html"><span class="back-arrow">←</span> back to the journal</a>
+
+  <!-- ===== trip stamp ===== -->
+  <header class="stamp">
+    <div>
+      <div class="code">ORD · CHICAGO · UNITED STATES</div>
+      <h1>Chicago,<br/>in <em>winter.</em></h1>
+      <div class="meta">
+        <span><b>41.88°N 87.63°W</b></span>
+        <span>DEC 2025</span>
+        <span>SEASON · <b>WINTER</b></span>
+      </div>
+    </div>
+    <div class="route">
+      <div class="flight-no">FLIGHT VD·001</div>
+      <div class="legs">BOM <span class="arrow">→</span> ORD</div>
+    </div>
+  </header>
+
+  <!-- ===== the map ===== -->
+  <section>
+    <div class="eyebrow">The map</div>
+    <h2>Where I actually went.</h2>
+
+    <div class="map-frame" id="map-frame"></div>
+    <script>
+      /* Paste your Google My Maps id here:
+         google.com/maps/d → open your map → Share → "Embed on my site" →
+         copy the mid=... value from the iframe src. */
+      const MY_MAPS_ID = "12nH6dTcvFQYetylbOg2R999Y30waM60";
+
+      const frame = document.getElementById("map-frame");
+      if (MY_MAPS_ID) {
+        frame.innerHTML = `<iframe src="https://www.google.com/maps/d/embed?mid=${MY_MAPS_ID}" loading="lazy" title="Chicago trip map"></iframe>`;
+      } else {
+        frame.innerHTML = `<div class="map-placeholder"><div>
+          <div class="pin-glyph">📍</div>
+          <p>Your Google My Maps embed goes here.<br/>
+          Create it at <code>google.com/maps/d</code>, hit Share → Embed,<br/>
+          and paste the <code>mid</code> value into <code>MY_MAPS_ID</code> in this file.</p>
+        </div></div>`;
+      }
+    </script>
+
+    <div class="spots">
+      <!-- these mirror the pins on the My Map above — edit the blurbs freely -->
+      <a class="spot" href="https://www.google.com/maps/search/?api=1&query=360+Chicago+Observation+Deck" target="_blank" rel="noopener">
+        <div class="name">360 Chicago</div>
+        <div class="why">The whole city and the frozen lake from the 94th floor of the old Hancock.</div>
+        <div class="gmaps">OPEN IN GOOGLE MAPS ↗</div>
+      </a>
+      <a class="spot" href="https://www.google.com/maps/search/?api=1&query=Starbucks+Reserve+Roastery+Chicago" target="_blank" rel="noopener">
+        <div class="name">Starbucks Reserve Roastery</div>
+        <div class="why">Five floors of theatrical coffee on the Magnificent Mile. Worth it for the warmth alone.</div>
+        <div class="gmaps">OPEN IN GOOGLE MAPS ↗</div>
+      </a>
+      <a class="spot" href="https://www.google.com/maps/search/?api=1&query=Harry+Potter+Shop+Chicago" target="_blank" rel="noopener">
+        <div class="name">Harry Potter Shop</div>
+        <div class="why">Wands on Michigan Avenue. No regrets.</div>
+        <div class="gmaps">OPEN IN GOOGLE MAPS ↗</div>
+      </a>
+      <a class="spot" href="https://www.google.com/maps/search/?api=1&query=Navy+Pier+Chicago" target="_blank" rel="noopener">
+        <div class="name">Navy Pier</div>
+        <div class="why">The wheel, the lake wind, and the skyline from the water's edge.</div>
+        <div class="gmaps">OPEN IN GOOGLE MAPS ↗</div>
+      </a>
+      <a class="spot" href="https://www.google.com/maps/search/?api=1&query=Flyover+Navy+Pier+Chicago" target="_blank" rel="noopener">
+        <div class="name">FlyOver</div>
+        <div class="why">Flying over Chicago without leaving Navy Pier — feet dangling, city streaming past.</div>
+        <div class="gmaps">OPEN IN GOOGLE MAPS ↗</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== photo scroll ===== -->
+  <section>
+    <div class="eyebrow">The scroll</div>
+    <h2>Pictures from the trip.</h2>
+    <div class="film">
+      <!-- Drop your photos in assets/trips/chicago/ and swap the .slot divs
+           for: <img src="assets/trips/chicago/IMG_0001.jpg" alt="..." /> -->
+      <figure>
+        <div class="slot"><span>drop a photo at<br/><code>assets/trips/chicago/01.jpg</code></span></div>
+        <figcaption>01 · THE BEAN, 8AM</figcaption>
+      </figure>
+      <figure>
+        <div class="slot"><span>drop a photo at<br/><code>assets/trips/chicago/02.jpg</code></span></div>
+        <figcaption>02 · RIVERWALK</figcaption>
+      </figure>
+      <figure>
+        <div class="slot"><span>drop a photo at<br/><code>assets/trips/chicago/03.jpg</code></span></div>
+        <figcaption>03 · SNOW ON THE L</figcaption>
+      </figure>
+      <figure>
+        <div class="slot"><span>drop a photo at<br/><code>assets/trips/chicago/04.jpg</code></span></div>
+        <figcaption>04 · DEEP DISH</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===== instagram ===== -->
+  <section>
+    <div class="eyebrow">Posted along the way</div>
+    <h2>On Instagram.</h2>
+    <div class="ig-row">
+      <!-- Swap the href for your actual post URLs -->
+      <a class="ig-card" href="https://www.instagram.com/" target="_blank" rel="noopener">
+        <span class="glyph"></span>
+        <span><span class="label">Skyline from the lake</span>
+        <span class="handle">instagram.com/p/…</span></span>
+      </a>
+      <a class="ig-card" href="https://www.instagram.com/" target="_blank" rel="noopener">
+        <span class="glyph"></span>
+        <span><span class="label">First snow reel</span>
+        <span class="handle">instagram.com/p/…</span></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== notes ===== -->
+  <section>
+    <div class="eyebrow">Field notes</div>
+    <h2>What stayed with me.</h2>
+    <div class="notes">
+      <span class="date">WRITTEN ON THE FLIGHT HOME</span>
+      <p>Replace this with your journal entry. A few honest paragraphs beat a
+      polished review — what the cold actually felt like walking out of O'Hare,
+      the first skyline moment, who you were with, what you'd tell someone
+      going next week.</p>
+      <p>Second paragraph if it wants one.</p>
+    </div>
+  </section>
+
+  <!-- ===== top three ===== -->
+  <section>
+    <div class="eyebrow">Top three</div>
+    <h2>Best of the trip.</h2>
+    <div class="podium">
+      <div class="win">
+        <div class="cat">Best meal</div>
+        <h3>Deep dish at Lou's</h3>
+        <p>Butter crust. The 45-minute wait was part of it.</p>
+      </div>
+      <div class="win">
+        <div class="cat">Best view</div>
+        <h3>The river at dusk</h3>
+        <p>From the DuSable bridge, lights coming on tower by tower.</p>
+      </div>
+      <div class="win">
+        <div class="cat">Best moment</div>
+        <h3>Snow starting on the L</h3>
+        <p>Brown line, above the streets, everyone went quiet at once.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== next time ===== -->
+  <section>
+    <div class="eyebrow">Still on the list</div>
+    <h2>Next time.</h2>
+    <ul class="next-time">
+      <li>Architecture boat tour — everything was frozen over.</li>
+      <li>A Bulls game at the United Center.</li>
+      <li>Garfield Park Conservatory on a grey day.</li>
+      <li>Summer. All of it. Apparently it's a different city.</li>
+    </ul>
+  </section>
+
+  <!-- ===== getting around ===== -->
+  <section>
+    <div class="eyebrow">Getting around</div>
+    <h2>The practical bit.</h2>
+    <div class="howto">
+      <div class="tip">
+        <div class="k">From the airport</div>
+        <p>Blue Line from O'Hare runs 24/7 into the Loop, ~45 min. Get a Ventra card at the station.</p>
+      </div>
+      <div class="tip">
+        <div class="k">In the city</div>
+        <p>The L covers almost everything; downtown is genuinely walkable if you dress for the wind.</p>
+      </div>
+      <div class="tip">
+        <div class="k">Worth knowing</div>
+        <p>Lake-effect cold is no joke in December — layers, and gloves you can use a phone with.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="hop">
+    <a href="index.html">← THE JOURNAL</a>
+    <a class="next" href="mumbai.html">NEXT STOP · <b>BOM MUMBAI</b> →</a>
+  </footer>
+
+</div>
+</body>
+</html>

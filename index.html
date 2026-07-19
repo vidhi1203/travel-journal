@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Travel Journal — from Mumbai to everywhere</title>
+
+<!-- Fonts: DM Serif Display (headline), DM Mono (labels/coords), DM Sans (body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    /* --- palette --- */
+    --space-0:   #04060d;   /* deepest background */
+    --space-1:   #070b16;   /* background mid */
+    --space-2:   #0b1120;   /* panels */
+    --ocean-deep:#0a2540;
+    --ocean-mid: #123a5e;
+    --cyan:      #4cc9f0;   /* atmosphere / sky-blue accent */
+    --cyan-soft: #48cae4;
+    --mint:      #a7f3d0;   /* flight trail */
+    --amber:     #fbbf24;   /* city pins */
+    --ink:       #eaf0f7;   /* primary text */
+    --muted:     #8493a8;   /* secondary text */
+    --line:      rgba(148,163,184,0.14);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    background: var(--space-0);
+    color: var(--ink);
+    font-family: "DM Sans", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body { overflow-x: hidden; }
+
+  /* ===== starfield ===== */
+  #stars {
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse at 50% 0%, #0c1428 0%, var(--space-0) 60%);
+    pointer-events: none;
+  }
+  .star {
+    position: absolute; border-radius: 50%;
+    background: #fff;
+    animation: twinkle var(--tw, 4s) ease-in-out infinite;
+  }
+  @keyframes twinkle { 0%,100%{opacity:.25} 50%{opacity:1} }
+
+  /* ===== hero (pinned) ===== */
+  .hero {
+    position: relative; z-index: 1;
+    height: 100vh; width: 100%;
+    overflow: hidden;
+  }
+
+  .stage {
+    position: absolute; inset: 0;
+    opacity: 0; /* faded in on load */
+  }
+  .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .stage .globe-fallback {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%; object-fit: cover;
+  }
+
+  /* ===== airport-code tags (projected from 3D each frame) —
+     dark pills so they stay readable over the city lights ===== */
+  .geo-code {
+    position: absolute; z-index: 2;
+    transform: translate(-50%, calc(-100% - 9px));
+    font-family: "DM Mono", monospace;
+    font-size: 9.5px; letter-spacing: .14em;
+    color: var(--ink);
+    background: rgba(4,6,13,0.72);
+    border: 1px solid rgba(167,243,208,0.3);
+    border-radius: 6px;
+    padding: 2.5px 7px;
+    pointer-events: none;
+    opacity: 0;
+    white-space: nowrap;
+  }
+  .geo-code.lay {
+    color: var(--muted);
+    border-color: rgba(148,163,184,0.22);
+    font-size: 8.5px;
+  }
+
+  /* ===== headline overlay ===== */
+  .copy {
+    position: absolute; z-index: 3;
+    top: clamp(28px, 8vh, 90px);
+    left: clamp(22px, 6vw, 90px);
+    /* explicit width: the absolutely-positioned beats don't contribute
+       intrinsic width, so shrink-to-fit would collapse the headline */
+    width: min(620px, 84vw);
+    pointer-events: none;
+  }
+  .eyebrow {
+    font-family: "DM Mono", monospace;
+    font-size: 12px; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--cyan-soft);
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .eyebrow::before {
+    content: ""; width: 34px; height: 1px; background: var(--cyan-soft);
+    opacity: .7;
+  }
+  .beats { position: relative; height: clamp(120px, 22vh, 200px); }
+  .beat {
+    position: absolute; inset: 0;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(38px, 6.2vw, 78px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    opacity: 0;
+  }
+  .beat.first { opacity: 1; } /* resting state; the scroll timeline fades it */
+  .beat em { font-style: italic; color: var(--cyan); }
+  /* ===== scroll cue (bottom-right) ===== */
+  .cue {
+    position: absolute; z-index: 3;
+    right: clamp(22px, 6vw, 90px);
+    bottom: clamp(26px, 6vh, 54px);
+    font-family: "DM Mono", monospace;
+    font-size: 12px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--muted);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .cue .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--mint);
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:.3;transform:scale(.7)} 50%{opacity:1;transform:scale(1)} }
+
+  /* ===== trips teaser (below hero, where scroll lands) ===== */
+  .trips {
+    position: relative; z-index: 1;
+    background:
+      linear-gradient(180deg, var(--space-0) 0%, var(--space-1) 30%, var(--space-2) 100%);
+    padding: clamp(80px, 14vh, 160px) clamp(22px, 6vw, 90px) 140px;
+    min-height: 100vh;
+  }
+  .trips-head { max-width: 700px; margin-bottom: 56px; }
+  .trips-head .eyebrow { margin-bottom: 20px; }
+  .trips-head h2 {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(30px, 4.6vw, 54px);
+    letter-spacing: -0.01em; line-height: 1.05;
+  }
+  .trips-head p { color: var(--muted); margin-top: 16px; max-width: 52ch; font-size: 17px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .card {
+    display: block; text-decoration: none; color: inherit;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: linear-gradient(160deg, rgba(19,58,94,0.28), rgba(11,17,32,0.5));
+    padding: 26px 24px 22px;
+    min-height: 220px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    transition: transform .35s ease, border-color .35s ease;
+  }
+  .card:hover { transform: translateY(-4px); border-color: rgba(76,201,240,0.4); }
+  .card .code {
+    font-family: "DM Mono", monospace; font-size: 12px;
+    letter-spacing: .18em; color: var(--cyan-soft);
+  }
+  .card h3 {
+    font-family: "DM Serif Display", serif;
+    font-size: 30px; margin: 14px 0 6px;
+  }
+  .card .meta { font-family: "DM Mono", monospace; font-size: 12.5px; color: var(--muted); }
+  .card .tags { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .card .tag {
+    font-size: 12px; color: var(--muted);
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 4px 11px;
+  }
+  .card.add {
+    align-items: center; justify-content: center; text-align: center;
+    color: var(--muted); border-style: dashed;
+    font-family: "DM Mono", monospace; font-size: 13px; letter-spacing: .04em;
+  }
+
+  /* reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .star { animation: none; }
+    .stage { opacity: 1; }
+    .beat.first { opacity: 1; }
+    .cue { opacity: 1; }
+  }
+</style>
+</head>
+
+<body>
+  <div id="stars"></div>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero">
+    <!-- The stage holds the WebGL earth. Pins/arc/plane live inside the 3D
+         scene so geography is exact; labels are HTML, projected each frame. -->
+    <div class="stage" id="stage"></div>
+
+    <!-- headline beats -->
+    <div class="copy">
+      <div class="eyebrow">A travel journal</div>
+      <div class="beats">
+        <h2 class="beat first" data-beat="0">I booked a <em>ticket.</em></h2>
+        <h2 class="beat" data-beat="1">I packed a bag.</h2>
+        <h2 class="beat" data-beat="2">I <em>boarded</em> the flight.</h2>
+      </div>
+    </div>
+
+    <div class="cue"><span class="dot"></span> scroll to take off</div>
+  </section>
+
+  <!-- ============ TRIPS TEASER (scroll lands here) ============ -->
+  <section class="trips">
+    <div class="trips-head">
+      <div class="eyebrow">The journey so far</div>
+      <h2>Places I've been, and what stayed with me.</h2>
+      <p>Each trip below becomes its own page: a map with the spots I loved, a few reels, and a short journal entry. This grid will be driven by <code style="font-family:'DM Mono',monospace;color:var(--cyan-soft)">trips.json</code> — for now, a taste.</p>
+      <p style="margin-top:14px"><a href="cities.html" style="font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.14em;color:var(--mint);text-decoration:none">THE FULL FLIGHT LOG · EVERY CITY SINCE 2008 →</a></p>
+    </div>
+
+    <div class="grid" id="trip-grid">
+      <!-- fallback cards for file:// viewing — replaced from trips.json when served -->
+      <a class="card" href="chicago.html">
+        <div><div class="code">ORD · 2025</div>
+          <h3>Chicago</h3>
+          <div class="meta">41.88°N  87.63°W · winter</div></div>
+        <div class="tags"><span class="tag">Millennium Park</span><span class="tag">The Bean</span><span class="tag">Deep dish</span></div>
+      </a>
+      <a class="card" href="mumbai.html">
+        <div><div class="code">BOM · home</div>
+          <h3>Mumbai</h3>
+          <div class="meta">19.08°N  72.88°E · always</div></div>
+        <div class="tags"><span class="tag">Marine Drive</span><span class="tag">Vada pav</span><span class="tag">Monsoon</span></div>
+      </a>
+      <article class="card add">
+        + your next trip drops in here
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== libraries (load in the browser; fine for GitHub Pages) ===== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+
+  <script>
+    /* ---------- starfield ---------- */
+    (function makeStars() {
+      const el = document.getElementById("stars");
+      const n = window.innerWidth < 700 ? 90 : 160;
+      let html = "";
+      for (let i = 0; i < n; i++) {
+        const s = Math.random() * 1.8 + 0.4;
+        html += `<span class="star" style="
+          left:${Math.random()*100}%; top:${Math.random()*100}%;
+          width:${s}px; height:${s}px;
+          --tw:${(Math.random()*4+2).toFixed(1)}s;
+          animation-delay:${(Math.random()*4).toFixed(1)}s"></span>`;
+      }
+      el.innerHTML = html;
+    })();
+  </script>
+
+  <script type="module">
+    import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    gsap.registerPlugin(ScrollTrigger);
+
+    const stage = document.getElementById("stage");
+
+    /* trips.json is the single source of truth: the globe's city pins,
+       the trips grid, and cities.html all render from it */
+    const tripsData = fetch("trips.json").then(r => {
+      if (!r.ok) throw new Error("trips.json " + r.status);
+      return r.json();
+    });
+
+    /* Textures live in assets/ for hosted builds; when the page is opened
+       straight off disk (file://) Chrome refuses local images in WebGL, so
+       fall back to the CORS-enabled originals. */
+    const TEX = location.protocol === "file:"
+      ? "https://threejs.org/examples/textures/planets/"
+      : "assets/";
+
+    /* ---------- geography ---------- */
+    // lat/lon -> unit vector matching three.js equirect sphere UVs
+    function latLonToVec3(lat, lon, r = 1) {
+      const phi = (90 - lat) * Math.PI / 180;
+      const theta = (lon + 180) * Math.PI / 180;
+      return new THREE.Vector3(
+        -r * Math.sin(phi) * Math.cos(theta),
+         r * Math.cos(phi),
+         r * Math.sin(phi) * Math.sin(theta)
+      );
+    }
+
+    // quaternion that rotates the globe so unit vector v faces the camera,
+    // keeping north up (yaw about Y, then pitch about X — no roll)
+    const _qy = new THREE.Quaternion(), _qx = new THREE.Quaternion(),
+          _v1 = new THREE.Vector3();
+    const X_AXIS = new THREE.Vector3(1, 0, 0), Y_AXIS = new THREE.Vector3(0, 1, 0);
+    function facingQuat(v, out) {
+      _qy.setFromAxisAngle(Y_AXIS, -Math.atan2(v.x, v.z));
+      _v1.copy(v).applyQuaternion(_qy);
+      _qx.setFromAxisAngle(X_AXIS, Math.atan2(_v1.y, _v1.z));
+      return out.copy(_qx).multiply(_qy);
+    }
+
+    /* ---------- scene ---------- */
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    } catch (e) {
+      // no WebGL: fall back to the generated still and let the copy carry the hero
+      const img = document.createElement("img");
+      img.src = "assets/earth_still.png";
+      img.alt = ""; img.className = "globe-fallback";
+      stage.prepend(img);
+      stage.style.opacity = 1;
+    }
+
+    // ?p=0..1 freezes the flight at that progress (handy for tuning shots)
+    const forceP = parseFloat(new URLSearchParams(location.search).get("p"));
+    const frozen = !isNaN(forceP);
+    const flight = { p: frozen ? Math.min(Math.max(forceP, 0), 1) : (reduce ? 1 : 0) };
+    let scene, camera, globe, clouds;
+    const _sub = new THREE.Vector3(), _proj = new THREE.Vector3();
+
+    if (renderer) {
+      renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+      stage.prepend(renderer.domElement);
+
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+
+      globe = new THREE.Group();
+      scene.add(globe);
+
+      const loader = new THREE.TextureLoader();
+      const tex = (f, cb) => loader.load(TEX + f, cb);
+
+      // earth: darkened day map + amber night lights, echoing the palette
+      const earthMat = new THREE.MeshPhongMaterial({
+        map: tex("earth_atmos_2048.jpg", t => { t.colorSpace = THREE.SRGBColorSpace; }),
+        emissiveMap: tex("earth_lights_2048.png", t => { t.colorSpace = THREE.SRGBColorSpace; }),
+        emissive: new THREE.Color(0xffcf8a),
+        emissiveIntensity: 1.15,
+        specular: new THREE.Color(0x224466),
+        shininess: 12,
+      });
+      globe.add(new THREE.Mesh(new THREE.SphereGeometry(1, 96, 96), earthMat));
+
+      clouds = new THREE.Mesh(
+        new THREE.SphereGeometry(1.012, 64, 64),
+        new THREE.MeshLambertMaterial({
+          map: tex("earth_clouds_1024.png"),
+          transparent: true, opacity: 0.18, depthWrite: false,
+        })
+      );
+      globe.add(clouds);
+
+      // cyan fresnel atmosphere
+      const atmo = new THREE.Mesh(
+        new THREE.SphereGeometry(1.06, 64, 64),
+        new THREE.ShaderMaterial({
+          uniforms: { c: { value: new THREE.Color(0x4cc9f0) } },
+          vertexShader: `
+            varying vec3 vN;
+            void main() {
+              vN = normalize(normalMatrix * normal);
+              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }`,
+          fragmentShader: `
+            varying vec3 vN; uniform vec3 c;
+            void main() {
+              float i = pow(0.66 - dot(vN, vec3(0.0, 0.0, 1.0)), 2.0);
+              gl_FragColor = vec4(c, 1.0) * i * 1.35;
+            }`,
+          blending: THREE.AdditiveBlending,
+          side: THREE.BackSide, transparent: true, depthWrite: false,
+        })
+      );
+      scene.add(atmo); // stays camera-facing; doesn't rotate with the globe
+
+      // twilight rim + faint fill so the dark side stays readable
+      const sun = new THREE.DirectionalLight(0x9fd8ff, 0.6);
+      sun.position.set(-2, 1.4, 1.2);
+      scene.add(sun, new THREE.AmbientLight(0x33415e, 0.55));
+
+      /* ----- pins -----
+         mint, not amber: the night-lights texture is itself amber/white,
+         so mint is the one color that reads clearly on top of it */
+      const pinMat = new THREE.MeshBasicMaterial({ color: 0xa7f3d0 });
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: 0xa7f3d0, transparent: true, opacity: 0.6, side: THREE.DoubleSide,
+      });
+
+      /* ----- every city from the flight log -----
+         loaded from trips.json. Stayed cities get a mint dot + ring and
+         a code tag; layover-only stops are muted. Until the fetch
+         resolves (or if it fails on file://) the globe has no pins. */
+      const stayGeo = new THREE.SphereGeometry(0.009, 12, 12);
+      const stayRingGeo = new THREE.RingGeometry(0.017, 0.02, 28);
+      const layGeo = new THREE.SphereGeometry(0.006, 8, 8);
+      const layMat = new THREE.MeshBasicMaterial({
+        color: 0x8493a8, transparent: true, opacity: 0.6,
+      });
+      const cityPins = [];
+      tripsData.then(({ cities }) => {
+        for (const c of cities) {
+          const stayed = c.stays > 0;
+          const n = latLonToVec3(c.lat, c.lon, 1);
+          if (stayed) {
+            const dot = new THREE.Mesh(stayGeo, pinMat);
+            dot.position.copy(n).multiplyScalar(1.002);
+            const ring = new THREE.Mesh(stayRingGeo, ringMat);
+            ring.position.copy(n).multiplyScalar(1.004);
+            ring.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), n);
+            globe.add(dot, ring);
+          } else {
+            const dot = new THREE.Mesh(layGeo, layMat);
+            dot.position.copy(n).multiplyScalar(1.002);
+            globe.add(dot);
+          }
+          const el = document.createElement("div");
+          el.className = stayed ? "geo-code" : "geo-code lay";
+          el.textContent = c.codes[0];
+          stage.appendChild(el);
+          cityPins.push({ el, n });
+        }
+      }).catch(() => {});
+
+      /* ----- per-frame update, all read from flight.p ----- */
+      const portrait = () => (camera.aspect < 1 ? 1.18 / Math.sqrt(camera.aspect) : 1);
+      // westward and never over the pole: India -> Arabia -> Europe ->
+      // Atlantic -> across the US, stopping over the American West just
+      // as Hawaii crests the lower-left limb. Latitude rises gently from
+      // Mumbai's 19°N toward Chicago's 42°N.
+      const LAT0 = 19.076, LAT1 = 41.878;
+      const LON0 = 72.8777, LON_DELTA = -182.88; // ends facing ~110°W
+      function render() {
+        const p = flight.p;
+
+        facingQuat(latLonToVec3(LAT0 + (LAT1 - LAT0) * p,
+                                LON0 + LON_DELTA * p).normalize(),
+                   globe.quaternion);
+
+        // camera: near at takeoff, widest and loneliest mid-crossing
+        camera.position.z = (2.9 + 1.0 * Math.sin(Math.PI * p)) * portrait();
+        camera.updateProjectionMatrix();
+
+        clouds.rotation.y += 0.00015;
+
+        for (const p of cityPins) placeLabel(p.el, p.n, 0.4);
+        renderer.render(scene, camera);
+      }
+
+      // project a pin into screen space; fade labels out around the limb
+      // (higher threshold = label appears only when facing the camera more)
+      function placeLabel(el, n, threshold) {
+        _proj.copy(n).multiplyScalar(1.03).applyQuaternion(globe.quaternion);
+        const facing = _proj.x * 0 + _proj.y * 0 + _proj.z; // dot with view axis
+        _proj.project(camera);
+        el.style.left = ((_proj.x * 0.5 + 0.5) * stage.clientWidth) + "px";
+        el.style.top = ((-_proj.y * 0.5 + 0.5) * stage.clientHeight) + "px";
+        el.style.opacity = THREE.MathUtils.clamp((facing - threshold) / 0.3, 0, 1);
+      }
+
+      function resize() {
+        const w = stage.clientWidth, h = stage.clientHeight;
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+      }
+      resize();
+      addEventListener("resize", resize);
+
+      if (reduce) {
+        // static, accessible fallback: journey complete, Chicago facing
+        render();
+        setTimeout(render, 1200); // once more after textures arrive
+      } else {
+        gsap.ticker.add(render);
+      }
+    }
+
+    /* ---------- trips grid from trips.json ----------
+       the static cards in the HTML are a fallback for file:// viewing;
+       when trips.json loads they are replaced wholesale */
+    tripsData.then(({ trips }) => {
+      const grid = document.getElementById("trip-grid");
+      const addCard = grid.querySelector(".card.add");
+      grid.querySelectorAll("a.card").forEach(el => el.remove());
+      for (const t of trips) {
+        const a = document.createElement("a");
+        a.className = "card";
+        a.href = t.page;
+        a.innerHTML = `
+          <div><div class="code">${t.code} · ${t.year}</div>
+            <h3>${t.city}</h3>
+            <div class="meta">${t.coords} · ${t.season}</div></div>
+          <div class="tags">${t.tags.map(x => `<span class="tag">${x}</span>`).join("")}</div>`;
+        grid.insertBefore(a, addCard);
+      }
+    }).catch(() => {});
+
+    /* ---------- motion ---------- */
+    if (frozen) {
+      gsap.set(".stage, .beat.first", { opacity: 1 });
+    } else if (!reduce) {
+      /* the story should replay from the top on reload, not resume mid-flight */
+      history.scrollRestoration = "manual";
+
+      /* Lenis smooth scroll wired to GSAP's ticker */
+      const lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 0.9 });
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((t) => lenis.raf(t * 1000));
+      gsap.ticker.lagSmoothing(0);
+
+      /* intro: fade the copy block up on load. The intro only ever touches
+         .copy (the container) — the scroll timeline owns the individual
+         beats/sub inside it, so the two can never fight over a property. */
+      gsap.timeline({ defaults: { ease: "power3.out" } })
+        .to(".stage", { opacity: 1, duration: 1.4 }, 0)
+        .fromTo(".copy", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 1 }, .15)
+        .fromTo(".cue", { opacity: 0 }, { opacity: 1, duration: .8 }, .7);
+
+      /* ---- master scroll timeline: pin hero, fly BOM -> ORD ---- */
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#hero",
+          start: "top top",
+          end: "+=2900",
+          scrub: 1,
+          pin: true,
+          anticipatePin: 1,
+        },
+      });
+
+      // one scrubbed value drives everything: globe rotation, camera,
+      // trail, and plane all read flight.p inside render()
+      tl.to(flight, { p: 1, ease: "power1.inOut", duration: 1 }, 0);
+
+      // headline beats: takeoff, packed bag, then a wordless crossing,
+      // and "I travelled." as the plane descends into Chicago.
+      // Explicit from-values (+ immediateRender:false) so scrubbing back to
+      // the top always restores the resting state, even if the visitor
+      // scrolled while the intro fade-in was still running.
+      tl.fromTo(".beat.first", { opacity: 1, y: 0 },
+          { opacity: 0, y: -20, duration: .18, immediateRender: false }, .18)
+        .fromTo('[data-beat="1"]', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .2 }, .26)
+        .to('[data-beat="1"]', { opacity: 0, y: -20, duration: .18 }, .48)
+        .fromTo('[data-beat="2"]', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .2 }, .80);
+    }
+  </script>
+</body>
+</html>
